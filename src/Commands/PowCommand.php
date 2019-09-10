@@ -4,7 +4,7 @@ namespace Jakmall\Recruitment\Calculator\Commands;
 
 use Illuminate\Console\Command;
 
-class PowCommand extends Command
+class PowCommand extends BaseCommand
 {
     /**
      * @var string
@@ -58,10 +58,12 @@ class PowCommand extends Command
     {
         $base = $this->getBaseInput();
         $exp = $this->getExpInput();
-        $description = $this->generateCalculationDescription($base, $exp);
+        $description = $this->generatePowCalculationDescription($base, $exp);
         $result = $this->calculate($base, $exp);
 
-        $this->comment(sprintf('%s = %s', $description, $result));
+        $output = sprintf('%s = %s', $description, $result);
+        $this->writeCsv([ucfirst($this->getCommandVerb()), $description, $result, $output]);
+        $this->comment($output);
     }
 
     protected function getBaseInput()
@@ -74,7 +76,7 @@ class PowCommand extends Command
         return $this->argument('exp');
     }
 
-    protected function generateCalculationDescription($base, $exp): string
+    protected function generatePowCalculationDescription($base, $exp): string
     {
         $operator = $this->getOperator();
         $glue = sprintf(' %s ', $operator);

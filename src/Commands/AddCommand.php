@@ -4,7 +4,7 @@ namespace Jakmall\Recruitment\Calculator\Commands;
 
 use Illuminate\Console\Command;
 
-class AddCommand extends Command
+class AddCommand extends BaseCommand
 {
     /**
      * @var string
@@ -39,47 +39,9 @@ class AddCommand extends Command
         return 'added';
     }
 
-    public function handle(): void
-    {
-        $numbers = $this->getInput();
-        $description = $this->generateCalculationDescription($numbers);
-        $result = $this->calculateAll($numbers);
-
-        $this->comment(sprintf('%s = %s', $description, $result));
-    }
-
-    protected function getInput(): array
-    {
-        return $this->argument('numbers');
-    }
-
-    protected function generateCalculationDescription(array $numbers): string
-    {
-        $operator = $this->getOperator();
-        $glue = sprintf(' %s ', $operator);
-
-        return implode($glue, $numbers);
-    }
-
     protected function getOperator(): string
     {
         return '+';
-    }
-
-    /**
-     * @param array $numbers
-     *
-     * @return float|int
-     */
-    protected function calculateAll(array $numbers)
-    {
-        $number = array_pop($numbers);
-
-        if (count($numbers) <= 0) {
-            return $number;
-        }
-
-        return $this->calculate($this->calculateAll($numbers), $number);
     }
 
     /**
